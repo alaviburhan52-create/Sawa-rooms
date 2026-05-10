@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sawa Rooms | Budget Stays Uganda</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+    <div style="display: flex; justify-content: flex-end; padding: 0.5rem 2rem; background: #f5f5f5;">
+        <button id="showHostFormBtn" class="btn-secondary" style="padding: 0.4rem 1rem; font-size: 0.9rem;">➕ List your room (Host)</button>
+    </div>
+    <div class="nav-container">
+        <a href="#" class="logo">🌍 SAWA <span>ROOMS</span></a>
+        <div class="nav-links">
+            <a href="#">Stays</a>
+            <a href="host.html">Become a host</a>
+            <a href="#">Help</a>
+            <a href="#" class="btn-small">Sign in</a>
+        </div>
+    </div>
+</nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Sleep well, pay little <br> <span class="highlight">$5 – $20/night</span></h1>
+            <p>Real rooms, real hosts, zero commission – Uganda's best budget stays.</p>
+            <div class="search-banner">
+                <input type="text" id="locationSearch" placeholder="📍 Kampala, Jinja, Mbarara...">
+                <button id="searchBtn" class="btn-primary">🔍 Search</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- FILTER SECTION (extensive amenities) -->
+        <aside class="filters-panel">
+            <h3>Filter by</h3>
+            
+            <div class="filter-group">
+                <label>💰 Max price per night</label>
+                <select id="priceFilter">
+                    <option value="100">Any</option>
+                    <option value="10">Under $10</option>
+                    <option value="15">$10 – $15</option>
+                    <option value="20">$15 – $20</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>📍 District</label>
+                <select id="districtFilter">
+                    <option value="all">All</option>
+                    <option value="Kampala">Kampala</option>
+                    <option value="Jinja">Jinja</option>
+                    <option value="Mbarara">Mbarara</option>
+                    <option value="Entebbe">Entebbe</option>
+                    <option value="Gulu">Gulu</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>⭐ Minimum rating</label>
+                <select id="ratingFilter">
+                    <option value="0">Any</option>
+                    <option value="4">4+ stars</option>
+                    <option value="3">3+ stars</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>🔧 Amenities (choose any)</label>
+                <div class="amenities-list">
+                    <label><input type="checkbox" value="wifi"> WiFi</label>
+                    <label><input type="checkbox" value="heater"> Water heater</label>
+                    <label><input type="checkbox" value="parking"> Free parking</label>
+                    <label><input type="checkbox" value="breakfast"> Breakfast</label>
+                    <label><input type="checkbox" value="ac"> Air conditioning</label>
+                    <label><input type="checkbox" value="tv"> Smart TV</label>
+                </div>
+            </div>
+
+            <button id="applyFilters" class="btn-secondary">Apply filters ✨</button>
+        </aside>
+        
+        <div class="amenities-list" style="margin: 1rem 0;">
+            <label><input type="checkbox" value="wifi"> WiFi</label>
+            <label><input type="checkbox" value="heater"> Water heater</label>
+            <label><input type="checkbox" value="parking"> Parking</label>
+            <label><input type="checkbox" value="breakfast"> Breakfast</label>
+            <label><input type="checkbox" value="ac"> AC</label>
+            <label><input type="checkbox" value="tv"> TV</label>
+        </div>
+        <button type="submit" class="btn-primary">✨ Add this room</button>
+        <button type="button" id="cancelHostForm" class="btn-outline" style="margin-left: 1rem;">Cancel</button>
+    </form>
+    <p id="hostMessage" style="margin-top: 1rem;"></p>
+</div>
+        <!-- ROOMS GRID -->
+        <section class="rooms-section">
+            <div class="rooms-header">
+                <h2>🏠 Stays for you</h2>
+                <p id="resultCount"></p>
+            </div>
+            <div id="roomsContainer" class="rooms-grid"></div>
+        </section>
+    </main>
+
+    <!-- BOOKING MODAL -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-card">
+            <span class="close-modal">&times;</span>
+            <h3>📋 Confirm your reservation</h3>
+            <form id="bookingForm">
+                <input type="text" id="guestName" placeholder="Full name" required>
+                <input type="email" id="guestEmail" placeholder="Email" required>
+                <input type="date" id="checkin" required>
+                <input type="date" id="checkout" required>
+                <input type="text" id="modalRoomName" readonly>
+                <p id="totalPriceDisplay" style="font-weight:bold; margin:10px 0;"></p>
+                <button type="submit" class="btn-primary">Confirm booking</button>
+            </form>
+            <div id="modalMessage"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Sawa Rooms – Connecting Uganda's travelers to affordable stays.</p>
+        <p>📍 Kampala, Uganda | ✉️ hello@sawarooms.ug</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
