@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #fef9f0;
+    color: #1e2a32;
+    line-height: 1.5;
+}
+
+/* VIBRANT COLOR SCHEME */
+:root {
+    --primary: #FF5A5F;   /* warm red/pink */
+    --secondary: #00A699; /* teal green */
+    --accent: #FC642D;    /* orange */
+    --dark: #2d3e50;
+    --light-bg: #fffaf2;
+    --shadow: 0 12px 28px rgba(0,0,0,0.08);
+}
+
+.navbar {
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+}
+.logo span {
+    color: var(--secondary);
+}
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+.nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--dark);
+}
+.btn-small {
+    background: var(--primary);
+    color: white !important;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+}
+.hero {
+    background: linear-gradient(135deg, #FFE5E0 0%, #FFF0E6 100%);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+}
+.highlight {
+    color: var(--primary);
+    background: #fff0c0;
+    padding: 0.1rem 0.5rem;
+    border-radius: 40px;
+}
+.search-banner {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.search-banner input {
+    padding: 1rem 1.5rem;
+    width: 300px;
+    border: none;
+    border-radius: 60px;
+    box-shadow: var(--shadow);
+    font-size: 1rem;
+}
+.btn-primary {
+    background: var(--primary);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 60px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-primary:hover {
+    background: #e0484d;
+    transform: scale(1.02);
+}
+.container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+/* FILTERS PANEL (grid + flex) */
+.filters-panel {
+    flex: 1.2;
+    min-width: 260px;
+    background: white;
+    border-radius: 32px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    align-self: start;
+    position: sticky;
+    top: 90px;
+}
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+.filter-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+select, .amenities-list {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 20px;
+    border: 1px solid #ffe0cc;
+    background: var(--light-bg);
+}
+.amenities-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    padding: 0;
+}
+.amenities-list label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.btn-secondary {
+    background: var(--secondary);
+    width: 100%;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 40px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+.rooms-section {
+    flex: 3;
+}
+.rooms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+}
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+.room-card {
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    transition: all 0.25s;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    border: 1px solid #ffe5d9;
+}
+.room-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+}
+.room-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+.room-info {
+    padding: 1.2rem;
+}
+.room-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+.room-location {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+.amenity-badge {
+    background: #f0f0f0;
+    border-radius: 30px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+    display: inline-block;
+    margin-right: 0.3rem;
+}
+.room-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin: 0.6rem 0;
+}
+.book-btn {
+    width: 100%;
+    background: var(--secondary);
+    border: none;
+    padding: 0.7rem;
+    border-radius: 40px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.book-btn:hover {
+    background: #008b7a;
+}
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-card {
+    background: white;
+    max-width: 500px;
+    width: 90%;
+    border-radius: 40px;
+    padding: 2rem;
+    position: relative;
+}
+.close-modal {
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+}
+#bookingForm input {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+}
+footer {
+    background: var(--dark);
+    color: #ccc;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 3rem;
+}
+@media (max-width: 900px) {
+    .container { flex-direction: column; }
+    .filters-panel { position: static; margin-bottom: 1rem; }
+}
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 0.7rem 1.5rem;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+}
