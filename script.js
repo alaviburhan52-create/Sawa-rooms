@@ -1,197 +1,127 @@
-// ROOMS DATA with amenities
-// Load or initialize rooms array
-let rooms = JSON.parse(localStorage.getItem('sawaRooms')) || [
-    { id: 1, name: "Cozy room Wandegeya", district: "Kampala", price: 7, rating: 4.2, image: "https://placehold.co/600x400/FFD1D1/black?text=Wandegeya", amenities: ["wifi","heater","parking"] },
-    { id: 2, name: "Garden guesthouse", district: "Kampala", price: 10, rating: 4.5, image: "https://placehold.co/600x400/FFE0B3/black?text=Garden", amenities: ["wifi","breakfast","tv"] },
-    { id: 3, name: "Jinja backpackers den", district: "Jinja", price: 5, rating: 4.0, image: "https://placehold.co/600x400/C8E6C9/black?text=Jinja", amenities: ["wifi","parking"] },
-    { id: 4, name: "Mbarara city lodge", district: "Mbarara", price: 9, rating: 4.3, image: "https://placehold.co/600x400/FFCC80/black?text=Mbarara", amenities: ["heater","ac","tv"] },
-    { id: 5, name: "Entebbe airport studio", district: "Entebbe", price: 12, rating: 4.7, image: "https://placehold.co/600x400/CE93D8/black?text=Entebbe", amenities: ["wifi","ac","parking","breakfast"] },
-    { id: 6, name: "Kampala shared dorm", district: "Kampala", price: 6, rating: 3.8, image: "https://placehold.co/600x400/B3E5FC/black?text=Dorm", amenities: ["wifi","heater"] },
-    { id: 7, name: "Jinja riverside cabin", district: "Jinja", price: 8, rating: 4.4, image: "https://placehold.co/600x400/A5D6A5/black?text=Riverside", amenities: ["wifi","parking","tv"] },
-    { id: 8, name: "Mbarara quiet homestay", district: "Mbarara", price: 5, rating: 4.1, image: "https://placehold.co/600x400/FFAB91/black?text=Homestay", amenities: ["heater","breakfast"] },
-    { id: 9, name: "Gulu traveller's inn", district: "Gulu", price: 11, rating: 4.0, image: "https://placehold.co/600x400/D7CCC8/black?text=Gulu", amenities: ["wifi","parking","ac"] }
+// UGX conversion (1 USD ≈ 3700 UGX) – rounding to nearest 5000
+function toUgx(usd) {
+    let ugx = usd * 3700;
+    ugx = Math.round(ugx / 5000) * 5000;
+    return ugx.toLocaleString('en-UG');
+}
+
+// Large pool of working Unsplash images (keep your favourites)
+const imagePool = [
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1586023492121-27a2e3536ea2?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop'
 ];
- // ---------- HOST FORM LOGIC ----------
-const showHostBtn = document.getElementById('showHostFormBtn');
-const hostContainer = document.getElementById('hostFormContainer');
-const cancelHost = document.getElementById('cancelHostForm');
-const hostForm = document.getElementById('hostForm');
 
-showHostBtn?.addEventListener('click', () => {
-    hostContainer.style.display = 'block';
-    showHostBtn.style.display = 'none';
-});
-cancelHost?.addEventListener('click', () => {
-    hostContainer.style.display = 'none';
-    showHostBtn.style.display = 'inline-block';
-});
-
-hostForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('roomName').value;
-    const district = document.getElementById('roomDistrict').value;
-    const price = parseFloat(document.getElementById('roomPrice').value);
-    const rating = parseFloat(document.getElementById('roomRating').value);
-    let image = document.getElementById('roomImage').value;
-    if (!image) image = "https://placehold.co/600x400/FFD1D1/black?text=New+Room";
-    
-    // Gather selected amenities
-    const selectedAmenities = [];
-    document.querySelectorAll('#hostForm .amenities-list input:checked').forEach(cb => {
-        selectedAmenities.push(cb.value);
-    });
-    
-    const newId = rooms.length + 1;
-    const newRoom = { id: newId, name, district, price, rating, image, amenities: selectedAmenities };
-    rooms.push(newRoom);
-    localStorage.setItem('sawaRooms', JSON.stringify(rooms));
-    
-    // Re-render and re-apply current filters
-    filterRooms();  // will use updated rooms array
-    hostContainer.style.display = 'none';
-    showHostBtn.style.display = 'inline-block';
-    hostForm.reset();
-    document.getElementById('hostMessage').innerHTML = '✅ Room added! It appears in listings above.';
-    setTimeout(() => { document.getElementById('hostMessage').innerHTML = ''; }, 3000);
-});
-
-let currentRooms = [...rooms];
-
-function getSelectedAmenities() {
-    let selected = [];
-    document.querySelectorAll('.amenities-list input:checked').forEach(cb => {
-        selected.push(cb.value);
-    });
-    return selected;
-}
-
-function filterRooms() {
-    const priceVal = document.getElementById('priceFilter').value;
-    const maxPrice = priceVal == 100 ? 999 : parseInt(priceVal);
-    const district = document.getElementById('districtFilter').value;
-    const minRating = parseFloat(document.getElementById('ratingFilter').value);
-    const selectedAmenities = getSelectedAmenities();
-
-    let filtered = rooms.filter(room => {
-        if (room.price > maxPrice) return false;
-        if (district !== 'all' && room.district !== district) return false;
-        if (minRating > 0 && room.rating < minRating) return false;
-        // amenities: room must contain ALL selected amenities
-        for (let amen of selectedAmenities) {
-            if (!room.amenities.includes(amen)) return false;
-        }
-        return true;
-    });
-    currentRooms = filtered;
-    renderRooms(currentRooms);
-    document.getElementById('resultCount').innerText = `${currentRooms.length} stays found`;
-}
-
-function renderRooms(roomsArray) {
-    const container = document.getElementById('roomsContainer');
-    if (!container) return;
-    if (roomsArray.length === 0) {
-        container.innerHTML = '<p style="grid-column:1/-1; text-align:center;">No rooms match your filters 🌟 Try adjusting amenities or price.</p>';
-        return;
-    }
-    container.innerHTML = roomsArray.map(room => `
-        <div class="room-card" data-id="${room.id}">
-            <div class="room-img" style="background-image: url('${room.image}');"></div>
-            <div class="room-info">
-                <div class="room-title">${room.name}</div>
-                <div class="room-location">📍 ${room.district} | ⭐ ${room.rating}</div>
-                <div class="room-amenities">
-                    ${room.amenities.map(a => `<span class="amenity-badge">${a}</span>`).join('')}
-                </div>
-                <div class="room-price">$${room.price} <small>/ night</small></div>
-                <button class="book-btn" data-room='${JSON.stringify(room)}'>Book now</button>
-            </div>
-        </div>
-    `).join('');
-    
-    document.querySelectorAll('.book-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const roomData = JSON.parse(btn.getAttribute('data-room'));
-            openBookingModal(roomData);
-        });
-    });
-}
-
-// Modal logic
-const modal = document.getElementById('bookingModal');
-const closeModal = document.querySelector('.close-modal');
-let selectedRoom = null;
-
-function openBookingModal(room) {
-    selectedRoom = room;
-    document.getElementById('modalRoomName').value = room.name;
-    modal.style.display = 'flex';
-    document.getElementById('totalPriceDisplay').innerText = '';
-}
-
-closeModal.onclick = () => {
-    modal.style.display = 'none';
-    document.getElementById('bookingForm').reset();
-    document.getElementById('modalMessage').innerHTML = '';
+// Unique room names per city (7 each)
+const roomNamesByCity = {
+  Kampala: [
+    "Modern Loft in Kololo", "Cozy Studio near Acacia Mall", "Entire Apartment in Naguru",
+    "Sunny Room in Ntinda", "Luxury Villa in Muyenga", "Executive Suite in Nakasero",
+    "Penthouse with City View"
+  ],
+  Jinja: [
+    "Riverside Cabin on the Nile", "Backpackers Den near Source", "Entire House near Bujagali",
+    "Cozy Private Room with Garden", "Luxury Lodge with Pool", "Budget Double near Market",
+    "Lakefront Studio with Sunset View"
+  ],
+  Mbarara: [
+    "City Lodge in Mbarara", "Quiet Homestay near Campus", "Apartment with Mountain View",
+    "Budget Shared Room", "Guesthouse near Hospital", "Luxury Suite with Jacuzzi",
+    "Family House with Garden"
+  ],
+  Entebbe: [
+    "Airport Studio 5min Drive", "Lake Victoria View Room", "Budget Double near Beach",
+    "Entire Cottage with Terrace", "Backpacker Dorm near Airport", "Guesthouse near Botanical Gardens",
+    "Family Suite with Kitchen"
+  ],
+  Gulu: [
+    "Traveler's Inn Downtown", "Budget Dorm in Gulu Town", "Entire House near Market",
+    "Quiet Guesthouse with Courtyard", "Luxury Suite with AC", "Studio Apartment with Workspace",
+    "Family Homestay with Meals"
+  ],
+  "Fort Portal": [
+    "Crater Lake View Lodge", "Budget Backpackers near Town", "Cottage near Kibale Forest",
+    "Homestay with Garden", "Luxury Resort with Spa", "Guesthouse in Town Center",
+    "Studio near Market Square"
+  ],
+  Arua: [
+    "Garden Studio with Breakfast", "Budget Room with Fan", "Entire House with Parking",
+    "Guesthouse near Arua Market", "Luxury Villa with Pool", "Simple Double Room",
+    "Family Room with Kitchenette"
+  ]
 };
 
-window.onclick = (e) => { if (e.target === modal) closeModal.click(); };
+const hosts = ['Sarah', 'James', 'Grace', 'John', 'Martha', 'Peter', 'Alice', 'David', 'Linda', 'Brian', 'Catherine', 'Joseph', 'Sophia', 'Daniel', 'Olivia'];
+const roomTypes = ['Entire place', 'Private room', 'Shared dorm'];
+const amenitiesList = ['wifi', 'heater', 'parking', 'breakfast', 'ac', 'tv'];
 
-document.getElementById('bookingForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('guestName').value;
-    const email = document.getElementById('guestEmail').value;
-    const checkin = document.getElementById('checkin').value;
-    const checkout = document.getElementById('checkout').value;
-    if (!name || !email || !checkin || !checkout) {
-        document.getElementById('modalMessage').innerHTML = '⚠️ Please fill all fields.';
-        return;
+function generateUniqueRooms() {
+    let rooms = [];
+    let id = 1;
+    const cities = Object.keys(roomNamesByCity);
+    for (let city of cities) {
+        const names = roomNamesByCity[city];
+        let shuffledImages = [...imagePool];
+        for (let i = shuffledImages.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledImages[i], shuffledImages[j]] = [shuffledImages[j], shuffledImages[i]];
+        }
+        for (let i = 0; i < names.length; i++) {
+            const name = names[i];
+            const usdPrice = Math.floor(Math.random() * 50) + 5;
+            const priceUgx = toUgx(usdPrice);
+            const rating = (Math.random() * 1.5 + 3.5).toFixed(1);
+            const reviews = Math.floor(Math.random() * 200) + 5;
+            const host = hosts[Math.floor(Math.random() * hosts.length)];
+            const image = shuffledImages[i % shuffledImages.length];
+            const type = roomTypes[Math.floor(Math.random() * roomTypes.length)];
+            const distance = (Math.random() * 3 + 0.2).toFixed(1) + 'km';
+            const amenities = [];
+            const numAmenities = Math.floor(Math.random() * 4) + 1;
+            for (let a = 0; a < numAmenities; a++) {
+                const amen = amenitiesList[Math.floor(Math.random() * amenitiesList.length)];
+                if (!amenities.includes(amen)) amenities.push(amen);
+            }
+            rooms.push({ id: id++, name, district: city, price: usdPrice, priceUgx, rating: Number(rating), reviews, host, image, amenities, distance, type });
+        }
     }
-    if (new Date(checkin) >= new Date(checkout)) {
-        document.getElementById('modalMessage').innerHTML = '⚠️ Check-out must be after check-in.';
-        return;
-    }
-    // nights calculation
-    const nights = Math.ceil((new Date(checkout) - new Date(checkin)) / (1000*3600*24));
-    const total = nights * selectedRoom.price;
-    document.getElementById('totalPriceDisplay').innerHTML = `Total: $${total} (${nights} nights)`;
-    
-    const booking = { room: selectedRoom.name, guest: name, email, checkin, checkout, total, date: new Date() };
-    let bookings = JSON.parse(localStorage.getItem('sawaBookings')) || [];
-    bookings.push(booking);
-    localStorage.setItem('sawaBookings', JSON.stringify(bookings));
-    
-    document.getElementById('modalMessage').innerHTML = `✅ Booked ${selectedRoom.name} for ${name}! Total $${total}. (demo)`;
-    setTimeout(() => { modal.style.display = 'none'; }, 2500);
-});
+    return rooms;
+}
 
-// Search by location text
-document.getElementById('searchBtn').addEventListener('click', () => {
-    const locText = document.getElementById('locationSearch').value.toLowerCase();
-    if (locText === "") {
-        filterRooms(); 
-        return;
-    }
-    let filteredByLoc = rooms.filter(r => r.district.toLowerCase().includes(locText) || r.name.toLowerCase().includes(locText));
-    // then apply other filters
-    const priceVal = document.getElementById('priceFilter').value;
-    const maxPrice = priceVal == 100 ? 999 : parseInt(priceVal);
-    const district = document.getElementById('districtFilter').value;
-    const minRating = parseFloat(document.getElementById('ratingFilter').value);
-    const selectedAmenities = getSelectedAmenities();
-    let final = filteredByLoc.filter(room => {
-        if (room.price > maxPrice) return false;
-        if (district !== 'all' && room.district !== district) return false;
-        if (minRating > 0 && room.rating < minRating) return false;
-        for (let a of selectedAmenities) if (!room.amenities.includes(a)) return false;
-        return true;
-    });
-    currentRooms = final;
-    renderRooms(currentRooms);
-    document.getElementById('resultCount').innerText = `${currentRooms.length} stays found`;
-});
+let allRooms = generateUniqueRooms();
+if (!localStorage.getItem('sawaRooms')) {
+    localStorage.setItem('sawaRooms', JSON.stringify(allRooms));
+} else {
+    allRooms = JSON.parse(localStorage.getItem('sawaRooms'));
+}
 
-document.getElementById('applyFilters').addEventListener('click', filterRooms);
+let wishlist = JSON.parse(localStorage.getItem('sawaWishlist')) || [];
 
-// initial render
-filterRooms();  
+function renderStars(rating) {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5;
+    let stars = '';
+    for (let i = 0; i < full; i++) stars += '★';
+    if (half) stars += '½';
+    for (let i = stars.length; i < 5; i++) stars += '☆';
+    return stars;
+}
+
+window.renderStars = renderStars;
+window.allRooms = allRooms;
+window.wishlist = wishlist;
+window.toUgx = toUgx;

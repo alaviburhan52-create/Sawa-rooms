@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sawa Rooms – Browse all stays</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300..700&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo"><i class="fas fa-home"></i> SAWA <span>ROOMS</span></a>
+        <div class="nav-links">
+            <a href="stays.html">Stays</a>
+            <a href="host.html">Become a host</a>
+            <a href="help.html">Help</a>
+            <a href="signin.html" class="btn-small">Sign in</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container" style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
+    <aside class="filter-sidebar" style="flex: 1.2; min-width: 260px;">
+        <h3>Filters</h3>
+        <div class="filter-group">
+            <label>💰 Max price per night ($)</label>
+            <div class="price-range">
+                <span>$0</span>
+                <input type="range" id="priceRange" min="0" max="100" step="1" value="100">
+                <span>$<span id="priceValue">100</span></span>
+            </div>
+        </div>
+        <div class="filter-group">
+            <label>📍 District</label>
+            <select id="districtFilter">
+                <option value="all">All</option>
+                <option>Kampala</option><option>Jinja</option><option>Mbarara</option><option>Entebbe</option><option>Gulu</option>
+                <option>Fort Portal</option><option>Arua</option><option>Mbale</option><option>Lira</option><option>Kabale</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>⭐ Minimum rating</label>
+            <select id="ratingFilter">
+                <option value="0">Any</option><option value="4">4+ stars</option><option value="3">3+ stars</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>🏠 Property type</label>
+            <select id="typeFilter">
+                <option value="all">All</option>
+                <option value="Entire place">Entire place</option>
+                <option value="Private room">Private room</option>
+                <option value="Shared dorm">Shared dorm</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>🔧 Amenities</label>
+            <div id="amenitiesCheckboxes" class="amenities-list"></div>
+        </div>
+        <button id="applyFilters" class="btn" style="width:100%">Apply filters</button>
+        <button id="clearFilters" class="btn-outline" style="width:100%; margin-top: 0.5rem;">Clear all</button>
+    </aside>
+
+    <section style="flex: 3;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+            <h2>All stays in Uganda</h2>
+            <div style="display: flex; gap: 1rem;">
+                <select id="sortSelect">
+                    <option value="price_asc">Price: low to high</option>
+                    <option value="price_desc">Price: high to low</option>
+                    <option value="rating_desc">Rating: high to low</option>
+                </select>
+                <div class="view-toggle">
+                    <button id="gridViewBtn" class="active"><i class="fas fa-th"></i></button>
+                    <button id="listViewBtn"><i class="fas fa-list"></i></button>
+                </div>
+            </div>
+        </div>
+        <!-- Loading skeleton -->
+        <div id="skeletonContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 2rem; margin: 2rem 0;">
+            <div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>
+        </div>
+        <div id="roomsContainer" class="rooms-grid" style="display: none;"></div>
+        <div id="resultCount" style="margin-top: 1rem;"></div>
+        <div class="load-more-container">
+            <button id="loadMoreBtn" class="btn-outline">Load more rooms</button>
+        </div>
+    </section>
+</main>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Confirm your stay</h3>
+        <form id="bookingForm">
+            <div class="form-group"><input type="text" id="guestName" placeholder="Full name" required></div>
+            <div class="form-group"><input type="email" id="guestEmail" placeholder="Email" required></div>
+            <div class="form-group"><input type="date" id="checkin" required></div>
+            <div class="form-group"><input type="date" id="checkout" required></div>
+            <p id="totalPriceDisplay" style="font-weight:bold;"></p>
+            <button type="submit" class="btn" style="width:100%">Confirm booking</button>
+        </form>
+        <div id="modalMessage"></div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Sawa Rooms – book budget stays with confidence</p>
+    <div class="social-icons"><a href="#"><i class="fab fa-facebook"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div>
+</footer>
+
+<script>
+    setTimeout(() => {
+        document.getElementById('skeletonContainer').style.display = 'none';
+        document.getElementById('roomsContainer').style.display = 'grid';
+        initStaysPage();
+    }, 500);
+
+    function initStaysPage() {
+        let currentRooms = [...window.allRooms];
+        let displayedCount = 12;
+        let filteredRooms = [];
+
+        const amenitiesList = ['wifi','heater','parking','breakfast','ac','tv'];
+        const amenitiesDiv = document.getElementById('amenitiesCheckboxes');
+        amenitiesList.forEach(a => { amenitiesDiv.innerHTML += `<label><input type="checkbox" value="${a}"> ${a}</label><br>`; });
+
+        const priceSlider = document.getElementById('priceRange');
+        const priceValue = document.getElementById('priceValue');
+        priceSlider.addEventListener('input', () => { priceValue.innerText = priceSlider.value; filterAndSort(); });
+
+        function getSelectedAmenities() { return [...document.querySelectorAll('#amenitiesCheckboxes input:checked')].map(cb => cb.value); }
+
+        function filterAndSort() {
+            const maxPrice = parseInt(priceSlider.value);
+            const district = document.getElementById('districtFilter').value;
+            const minRating = parseFloat(document.getElementById('ratingFilter').value);
+            const type = document.getElementById('typeFilter').value;
+            const selectedAmenities = getSelectedAmenities();
+            filteredRooms = window.allRooms.filter(r => r.price <= maxPrice && (district === 'all' || r.district === district) && r.rating >= minRating && (type === 'all' || r.type === type) && selectedAmenities.every(amen => r.amenities.includes(amen)));
+            const sort = document.getElementById('sortSelect').value;
+            if (sort === 'price_asc') filteredRooms.sort((a,b) => a.price - b.price);
+            if (sort === 'price_desc') filteredRooms.sort((a,b) => b.price - a.price);
+            if (sort === 'rating_desc') filteredRooms.sort((a,b) => b.rating - a.rating);
+            displayedCount = 12;
+            renderRooms();
+            document.getElementById('resultCount').innerText = `${filteredRooms.length} stays found`;
+        }
+
+        function renderRooms() {
+            const container = document.getElementById('roomsContainer');
+            const displayRooms = filteredRooms.slice(0, displayedCount);
+            if (!displayRooms.length) { container.innerHTML = '<p style="text-align:center; grid-column:1/-1;">No rooms match your filters.</p>'; return; }
+            container.innerHTML = displayRooms.map(room => `
+                <div class="room-card" data-id="${room.id}">
+                    <div class="room-img" style="background-image: url('${room.image}');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div>
+                    <div class="wishlist-icon" data-id="${room.id}"><i class="far fa-heart"></i></div>
+                    <div class="room-info">
+                        <div class="room-title">${room.name}</div>
+                        <div class="host-info"><span class="host-avatar" style="background: #ccc;"></span> Hosted by ${room.host}</div>
+                        <div class="review-stars">${window.renderStars(room.rating)} (${room.reviews} reviews)</div>
+                        <div class="room-price">$${room.price} <small>/ night</small></div>
+                        <div class="room-actions">
+                            <button class="share-wa" data-room='${JSON.stringify(room)}'><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                            <button class="share-ig" data-room='${JSON.stringify(room)}'><i class="fab fa-instagram"></i> Instagram</button>
+                            <button class="contact-host" data-room='${JSON.stringify(room)}'><i class="fas fa-phone"></i> Call</button>
+                            <button class="book-btn" data-room='${JSON.stringify(room)}'><i class="fas fa-calendar-check"></i> Book</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            // wishlist logic
+            let wishlist = JSON.parse(localStorage.getItem('sawaWishlist')) || [];
+            document.querySelectorAll('.wishlist-icon').forEach(icon => {
+                const id = parseInt(icon.dataset.id);
+                if (wishlist.includes(id)) icon.innerHTML = '<i class="fas fa-heart"></i>';
+                icon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let wish = JSON.parse(localStorage.getItem('sawaWishlist')) || [];
+                    if (wish.includes(id)) {
+                        wish = wish.filter(i => i !== id);
+                        icon.innerHTML = '<i class="far fa-heart"></i>';
+                    } else {
+                        wish.push(id);
+                        icon.innerHTML = '<i class="fas fa-heart"></i>';
+                    }
+                    localStorage.setItem('sawaWishlist', JSON.stringify(wish));
+                });
+            });
+            // WhatsApp share
+            document.querySelectorAll('.share-wa').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const room = JSON.parse(btn.dataset.room);
+                    const text = `Check out ${room.name} at Sawa Rooms! Only $${room.price}/night.`;
+                    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                });
+            });
+            // Instagram
+            document.querySelectorAll('.share-ig').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    window.open('https://instagram.com/sawaroomsofficial', '_blank');
+                });
+            });
+            // Contact host
+            document.querySelectorAll('.contact-host').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    alert('Call host: +256 700 123 456 (demo)');
+                });
+            });
+            // Book button modal
+            document.querySelectorAll('.book-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const room = JSON.parse(btn.dataset.room);
+                    openModal(room);
+                });
+            });
+        }
+
+        // Load more
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            if (displayedCount < filteredRooms.length) {
+                displayedCount += 12;
+                renderRooms();
+            } else {
+                alert('All rooms loaded!');
+            }
+        });
+
+        // View toggle
+        const gridBtn = document.getElementById('gridViewBtn');
+        const listBtn = document.getElementById('listViewBtn');
+        const container = document.getElementById('roomsContainer');
+        gridBtn.addEventListener('click', () => {
+            container.classList.remove('list-view');
+            gridBtn.classList.add('active');
+            listBtn.classList.remove('active');
+        });
+        listBtn.addEventListener('click', () => {
+            container.classList.add('list-view');
+            listBtn.classList.add('active');
+            gridBtn.classList.remove('active');
+        });
+
+        // Modal logic
+        const modal = document.getElementById('bookingModal');
+        const closeBtn = document.querySelector('.close');
+        let selectedRoom = null;
+        function openModal(room) { selectedRoom = room; modal.style.display = 'flex'; document.getElementById('totalPriceDisplay').innerText = ''; }
+        closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('guestName').value, email = document.getElementById('guestEmail').value, checkin = document.getElementById('checkin').value, checkout = document.getElementById('checkout').value;
+            if (!name || !email || !checkin || !checkout) { document.getElementById('modalMessage').innerHTML = 'Please fill all fields'; return; }
+            const nights = Math.ceil((new Date(checkout)-new Date(checkin))/(1000*3600*24));
+            const total = nights * selectedRoom.price;
+            document.getElementById('totalPriceDisplay').innerHTML = `Total: $${total} (${nights} nights)`;
+            let bookings = JSON.parse(localStorage.getItem('sawaBookings')) || [];
+            bookings.push({ room: selectedRoom.name, guest: name, email, checkin, checkout, total });
+            localStorage.setItem('sawaBookings', JSON.stringify(bookings));
+            document.getElementById('modalMessage').innerHTML = `✅ Booked ${selectedRoom.name} for $${total}. Check your email (demo).`;
+            setTimeout(() => modal.style.display = 'none', 2000);
+        });
+        document.getElementById('applyFilters').addEventListener('click', filterAndSort);
+        document.getElementById('clearFilters').addEventListener('click', () => {
+            priceSlider.value = 100; priceValue.innerText = '100';
+            document.getElementById('districtFilter').value = 'all';
+            document.getElementById('ratingFilter').value = '0';
+            document.getElementById('typeFilter').value = 'all';
+            document.querySelectorAll('#amenitiesCheckboxes input').forEach(cb => cb.checked = false);
+            filterAndSort();
+        });
+        document.getElementById('sortSelect').addEventListener('change', filterAndSort);
+        const savedSearch = localStorage.getItem('sawaSearch');
+        if (savedSearch) { document.getElementById('districtFilter').value = savedSearch; localStorage.removeItem('sawaSearch'); }
+        filterAndSort();
+    }
+</script>
+</body>
+</html>

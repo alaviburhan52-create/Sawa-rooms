@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sawa Rooms – Sign in</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300..700&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo"><i class="fas fa-home"></i> SAWA <span>ROOMS</span></a>
+        <div class="nav-links">
+            <a href="stays.html">Stays</a>
+            <a href="host.html">Become a host</a>
+            <a href="help.html">Help</a>
+            <a href="signin.html" class="btn-small">Sign in</a>
+        </div>
+    </div>
+</nav>
+<main class="container" style="max-width: 500px; margin: 3rem auto;">
+    <div class="signin-card">
+        <h2 style="margin-bottom: 1rem;">Welcome back</h2>
+        <form id="signinForm">
+            <div class="form-group"><input type="email" id="signinEmail" placeholder="Email address" required></div>
+            <div class="form-group"><input type="password" id="signinPassword" placeholder="Password" required></div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="rememberMe"> <label for="rememberMe">Remember me</label>
+            </div>
+            <button type="submit" class="btn" style="width:100%">Sign in</button>
+            <div style="text-align: right; margin-top: 0.5rem;">
+                <a href="#" id="forgotPassword">Forgot password?</a>
+            </div>
+        </form>
+        <div class="social-login" style="display: flex; gap: 1rem; justify-content: center; margin: 1rem 0;">
+            <button class="btn-social" id="googleSignin"><i class="fab fa-google"></i> Google</button>
+            <button class="btn-social" id="facebookSignin"><i class="fab fa-facebook"></i> Facebook</button>
+        </div>
+        <hr style="margin: 1.5rem 0;">
+        <p style="text-align: center;">New to Sawa Rooms? <a href="#" id="showSignup">Create an account</a></p>
+        <div id="signupForm" style="display: none;">
+            <h3>Sign up</h3>
+            <form id="registerForm">
+                <div class="form-group"><input type="text" id="signupName" placeholder="Full name" required></div>
+                <div class="form-group"><input type="email" id="signupEmail" placeholder="Email" required></div>
+                <div class="form-group"><input type="password" id="signupPassword" placeholder="Password" required></div>
+                <div class="checkbox-group"><input type="checkbox" id="agreeTerms" required> <label for="agreeTerms">I agree to the Terms & Privacy Policy</label></div>
+                <button type="submit" class="btn">Create account</button>
+            </form>
+        </div>
+        <div id="authMessage" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+        <div class="local-impact" style="margin-top: 1.5rem; padding: 0.75rem; font-size: 0.8rem;">
+            <i class="fas fa-shield-alt"></i> By signing in, you support local hosts in Uganda.
+        </div>
+    </div>
+</main>
+<footer><p>© 2026 Sawa Rooms – travel with peace of mind</p></footer>
+<script>
+    document.getElementById('showSignup').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('signupForm').style.display = 'block';
+        document.getElementById('showSignup').style.display = 'none';
+    });
+    document.getElementById('forgotPassword').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('authMessage').innerHTML = '📧 Password reset link sent to your email (demo).';
+    });
+    document.getElementById('googleSignin').addEventListener('click', () => {
+        document.getElementById('authMessage').innerHTML = '🔐 Google sign‑in demo – would redirect to Google.';
+    });
+    document.getElementById('facebookSignin').addEventListener('click', () => {
+        document.getElementById('authMessage').innerHTML = '🔐 Facebook sign‑in demo – would redirect to Facebook.';
+    });
+    document.getElementById('signinForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signinEmail').value;
+        const remember = document.getElementById('rememberMe').checked;
+        if (email && document.getElementById('signinPassword').value.length >= 1) {
+            localStorage.setItem('sawaUser', JSON.stringify({ email, name: 'Guest', remember }));
+            document.getElementById('authMessage').innerHTML = '✅ Signed in successfully. <a href="index.html">Go home</a>';
+            if (remember) {
+                localStorage.setItem('sawaRememberEmail', email);
+            } else {
+                localStorage.removeItem('sawaRememberEmail');
+            }
+        } else {
+            document.getElementById('authMessage').innerHTML = '⚠️ Please enter a valid email and password.';
+        }
+    });
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const agree = document.getElementById('agreeTerms').checked;
+        if (!name || !email || !password || !agree) {
+            document.getElementById('authMessage').innerHTML = '⚠️ Please fill all fields and agree to terms.';
+            return;
+        }
+        localStorage.setItem('sawaUser', JSON.stringify({ email, name }));
+        document.getElementById('authMessage').innerHTML = '✅ Account created! <a href="index.html">Start browsing</a>';
+        document.getElementById('signupForm').style.display = 'none';
+    });
+    const rememberedEmail = localStorage.getItem('sawaRememberEmail');
+    if (rememberedEmail) {
+        document.getElementById('signinEmail').value = rememberedEmail;
+        document.getElementById('rememberMe').checked = true;
+    }
+</script>
+</body>
+</html>

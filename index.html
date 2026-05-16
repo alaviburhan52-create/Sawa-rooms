@@ -3,135 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sawa Rooms | Budget Stays Uganda</title>
+    <title>Sawa Rooms – Uganda's best budget stays</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@300..700&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .room-img { background-size: cover; background-position: center; background-color: #f0f0f0; }
+    </style>
 </head>
 <body>
 
-    <nav class="navbar">
-    <div style="display: flex; justify-content: flex-end; padding: 0.5rem 2rem; background: #f5f5f5;">
-        <button id="showHostFormBtn" class="btn-secondary" style="padding: 0.4rem 1rem; font-size: 0.9rem;">➕ List your room (Host)</button>
-    </div>
+<nav class="navbar">
     <div class="nav-container">
-        <a href="#" class="logo">🌍 SAWA <span>ROOMS</span></a>
+        <a href="index.html" class="logo"><i class="fas fa-home"></i> SAWA <span>ROOMS</span></a>
         <div class="nav-links">
-            <a href="#">Stays</a>
+            <a href="stays.html">Stays</a>
             <a href="host.html">Become a host</a>
-            <a href="#">Help</a>
-            <a href="#" class="btn-small">Sign in</a>
+            <a href="help.html">Help</a>
+            <a href="signin.html" class="btn-small">Sign in</a>
         </div>
     </div>
 </nav>
 
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Sleep well, pay little <br> <span class="highlight">$5 – $20/night</span></h1>
-            <p>Real rooms, real hosts, zero commission – Uganda's best budget stays.</p>
-            <div class="search-banner">
-                <input type="text" id="locationSearch" placeholder="📍 Kampala, Jinja, Mbarara...">
-                <button id="searchBtn" class="btn-primary">🔍 Search</button>
-            </div>
-        </div>
-    </header>
-
-    <main class="container">
-        <!-- FILTER SECTION (extensive amenities) -->
-        <aside class="filters-panel">
-            <h3>Filter by</h3>
-            
-            <div class="filter-group">
-                <label>💰 Max price per night</label>
-                <select id="priceFilter">
-                    <option value="100">Any</option>
-                    <option value="10">Under $10</option>
-                    <option value="15">$10 – $15</option>
-                    <option value="20">$15 – $20</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label>📍 District</label>
-                <select id="districtFilter">
-                    <option value="all">All</option>
-                    <option value="Kampala">Kampala</option>
-                    <option value="Jinja">Jinja</option>
-                    <option value="Mbarara">Mbarara</option>
-                    <option value="Entebbe">Entebbe</option>
-                    <option value="Gulu">Gulu</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label>⭐ Minimum rating</label>
-                <select id="ratingFilter">
-                    <option value="0">Any</option>
-                    <option value="4">4+ stars</option>
-                    <option value="3">3+ stars</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label>🔧 Amenities (choose any)</label>
-                <div class="amenities-list">
-                    <label><input type="checkbox" value="wifi"> WiFi</label>
-                    <label><input type="checkbox" value="heater"> Water heater</label>
-                    <label><input type="checkbox" value="parking"> Free parking</label>
-                    <label><input type="checkbox" value="breakfast"> Breakfast</label>
-                    <label><input type="checkbox" value="ac"> Air conditioning</label>
-                    <label><input type="checkbox" value="tv"> Smart TV</label>
-                </div>
-            </div>
-
-            <button id="applyFilters" class="btn-secondary">Apply filters ✨</button>
-        </aside>
-        
-        <div class="amenities-list" style="margin: 1rem 0;">
-            <label><input type="checkbox" value="wifi"> WiFi</label>
-            <label><input type="checkbox" value="heater"> Water heater</label>
-            <label><input type="checkbox" value="parking"> Parking</label>
-            <label><input type="checkbox" value="breakfast"> Breakfast</label>
-            <label><input type="checkbox" value="ac"> AC</label>
-            <label><input type="checkbox" value="tv"> TV</label>
-        </div>
-        <button type="submit" class="btn-primary">✨ Add this room</button>
-        <button type="button" id="cancelHostForm" class="btn-outline" style="margin-left: 1rem;">Cancel</button>
-    </form>
-    <p id="hostMessage" style="margin-top: 1rem;"></p>
-</div>
-        <!-- ROOMS GRID -->
-        <section class="rooms-section">
-            <div class="rooms-header">
-                <h2>🏠 Stays for you</h2>
-                <p id="resultCount"></p>
-            </div>
-            <div id="roomsContainer" class="rooms-grid"></div>
-        </section>
-    </main>
-
-    <!-- BOOKING MODAL -->
-    <div id="bookingModal" class="modal">
-        <div class="modal-card">
-            <span class="close-modal">&times;</span>
-            <h3>📋 Confirm your reservation</h3>
-            <form id="bookingForm">
-                <input type="text" id="guestName" placeholder="Full name" required>
-                <input type="email" id="guestEmail" placeholder="Email" required>
-                <input type="date" id="checkin" required>
-                <input type="date" id="checkout" required>
-                <input type="text" id="modalRoomName" readonly>
-                <p id="totalPriceDisplay" style="font-weight:bold; margin:10px 0;"></p>
-                <button type="submit" class="btn-primary">Confirm booking</button>
-            </form>
-            <div id="modalMessage"></div>
+<header class="hero-image">
+    <div class="hero-content">
+        <h1>Find your place to stay in Uganda<br>from <span style="background: var(--primary); padding: 0 0.5rem; border-radius: 40px;">$5/night</span></h1>
+        <p>Real rooms, real hosts – zero commission. Book unique homes and experiences.</p>
+        <div class="search-banner">
+            <input type="text" id="heroSearch" placeholder="Search by city... Kampala, Jinja...">
+            <button id="heroSearchBtn">Search</button>
         </div>
     </div>
+</header>
 
-    <footer>
-        <p>© 2026 Sawa Rooms – Connecting Uganda's travelers to affordable stays.</p>
-        <p>📍 Kampala, Uganda | ✉️ hello@sawarooms.ug</p>
-    </footer>
+<main class="container">
+    <!-- Stats bar (static numbers) -->
+    <section style="background: var(--light-gray); border-radius: 32px; padding: 2rem; margin: 2rem 0; text-align: center;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem;">
+            <div><i class="fas fa-home" style="font-size: 2rem; color: var(--primary);"></i><h3>49+</h3><p>Unique stays</p></div>
+            <div><i class="fas fa-users" style="font-size: 2rem; color: var(--primary);"></i><h3>1,200+</h3><p>Happy guests</p></div>
+            <div><i class="fas fa-star" style="font-size: 2rem; color: var(--primary);"></i><h3>4.5+</h3><p>Average rating</p></div>
+            <div><i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--primary);"></i><h3>24/7</h3><p>Support</p></div>
+        </div>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- Kampala -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Kampala</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Modern Loft in Kololo</div><div class="host-info">Hosted by Sarah</div><div class="review-stars">★★★★☆ (124)</div><div class="room-price">$45/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Cozy Studio near Acacia Mall</div><div class="host-info">Hosted by James</div><div class="review-stars">★★★★☆ (89)</div><div class="room-price">$25/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Entire Apartment in Naguru</div><div class="host-info">Hosted by Grace</div><div class="review-stars">★★★★★ (56)</div><div class="room-price">$65/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1676823553207-758c7a66e9bb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Sunny Room in Ntinda</div><div class="host-info">Hosted by John</div><div class="review-stars">★★★★☆ (43)</div><div class="room-price">$30/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Luxury Villa in Muyenga</div><div class="host-info">Hosted by Martha</div><div class="review-stars">★★★★★ (32)</div><div class="room-price">$120/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Executive Suite in Nakasero</div><div class="host-info">Hosted by Peter</div><div class="review-stars">★★★★☆ (67)</div><div class="room-price">$85/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Penthouse with City View</div><div class="host-info">Hosted by Alice</div><div class="review-stars">★★★★★ (28)</div><div class="room-price">$110/night</div></div></div>
+    </div></section>
+
+    <!-- Jinja -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Jinja</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Riverside Cabin on the Nile</div><div class="host-info">Hosted by David</div><div class="review-stars">★★★★☆ (98)</div><div class="room-price">$35/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Backpackers Den near Source</div><div class="host-info">Hosted by Linda</div><div class="review-stars">★★★★☆ (210)</div><div class="room-price">$8/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Entire House near Bujagali</div><div class="host-info">Hosted by Brian</div><div class="review-stars">★★★★☆ (67)</div><div class="room-price">$55/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1564078516393-cf04bd966897?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Cozy Private Room with Garden</div><div class="host-info">Hosted by Catherine</div><div class="review-stars">★★★★☆ (89)</div><div class="room-price">$15/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cm9vbXxlbnwwfHwwfHx8MA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Luxury Lodge with Pool</div><div class="host-info">Hosted by Joseph</div><div class="review-stars">★★★★★ (42)</div><div class="room-price">$85/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Budget Double near Market</div><div class="host-info">Hosted by Sophia</div><div class="review-stars">★★★★☆ (112)</div><div class="room-price">$12/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Lakefront Studio with Sunset View</div><div class="host-info">Hosted by Daniel</div><div class="review-stars">★★★★☆ (61)</div><div class="room-price">$38/night</div></div></div>
+    </div></section>
+
+    <!-- Mbarara -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Mbarara</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">City Lodge in Mbarara</div><div class="host-info">Hosted by Olivia</div><div class="review-stars">★★★★☆ (56)</div><div class="room-price">$25/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Quiet Homestay near Campus</div><div class="host-info">Hosted by Sarah</div><div class="review-stars">★★★★☆ (43)</div><div class="room-price">$12/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Apartment with Mountain View</div><div class="host-info">Hosted by James</div><div class="review-stars">★★★★☆ (32)</div><div class="room-price">$40/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1676968002767-1f6a09891350?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Budget Shared Room</div><div class="host-info">Hosted by Grace</div><div class="review-stars">★★★☆☆ (77)</div><div class="room-price">$6/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Guesthouse near Hospital</div><div class="host-info">Hosted by John</div><div class="review-stars">★★★★☆ (64)</div><div class="room-price">$18/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1564078516393-cf04bd966897?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cm9vbXxlbnwwfHwwfHx8MA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Luxury Suite with Jacuzzi</div><div class="host-info">Hosted by Martha</div><div class="review-stars">★★★★★ (28)</div><div class="room-price">$65/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Family House with Garden</div><div class="host-info">Hosted by Peter</div><div class="review-stars">★★★★☆ (22)</div><div class="room-price">$50/night</div></div></div>
+    </div></section>
+
+    <!-- Entebbe -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Entebbe</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Airport Studio 5min Drive</div><div class="host-info">Hosted by Alice</div><div class="review-stars">★★★★★ (312)</div><div class="room-price">$35/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Lake Victoria View Room</div><div class="host-info">Hosted by David</div><div class="review-stars">★★★★☆ (98)</div><div class="room-price">$45/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Budget Double near Beach</div><div class="host-info">Hosted by Linda</div><div class="review-stars">★★★★☆ (76)</div><div class="room-price">$15/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Entire Cottage with Terrace</div><div class="host-info">Hosted by Brian</div><div class="review-stars">★★★★★ (44)</div><div class="room-price">$60/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHJvb218ZW58MHx8MHx8fDA%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Backpacker Dorm near Airport</div><div class="host-info">Hosted by Catherine</div><div class="review-stars">★★★★☆ (134)</div><div class="room-price">$8/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1686090448517-2f692cc45187?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bG9kZ2V8ZW58MHx8MHx8fDA%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Guesthouse near Botanical Gardens</div><div class="host-info">Hosted by Joseph</div><div class="review-stars">★★★★☆ (67)</div><div class="room-price">$22/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1607712617949-8c993d290809?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGxvZGdlfGVufDB8fDB8fHww');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Family Suite with Kitchen</div><div class="host-info">Hosted by Sophia</div><div class="review-stars">★★★★☆ (28)</div><div class="room-price">$55/night</div></div></div>
+    </div></section>
+
+    <!-- Gulu -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Gulu</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Traveler's Inn Downtown</div><div class="host-info">Hosted by Daniel</div><div class="review-stars">★★★★☆ (43)</div><div class="room-price">$20/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1687710306899-10a3bfcacf9b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGNvdHRhZ2V8ZW58MHx8MHx8fDA%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Budget Dorm in Gulu Town</div><div class="host-info">Hosted by Olivia</div><div class="review-stars">★★★☆☆ (67)</div><div class="room-price">$6/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Entire House near Market</div><div class="host-info">Hosted by Sarah</div><div class="review-stars">★★★★☆ (32)</div><div class="room-price">$35/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1666241368300-a1115df75b7c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGNvdHRhZ2V8ZW58MHx8MHx8fDA%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Quiet Guesthouse with Courtyard</div><div class="host-info">Hosted by James</div><div class="review-stars">★★★★☆ (54)</div><div class="room-price">$18/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1544984243-ec57ea16fe25?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGFpcmJuYnxlbnwwfHwwfHx8MA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Luxury Suite with AC</div><div class="host-info">Hosted by Grace</div><div class="review-stars">★★★★☆ (21)</div><div class="room-price">$50/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Studio Apartment with Workspace</div><div class="host-info">Hosted by John</div><div class="review-stars">★★★★☆ (38)</div><div class="room-price">$22/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Family Homestay with Meals</div><div class="host-info">Hosted by Martha</div><div class="review-stars">★★★★☆ (29)</div><div class="room-price">$28/night</div></div></div>
+    </div></section>
+
+    <!-- Fort Portal -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Fort Portal</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Crater Lake View Lodge</div><div class="host-info">Hosted by Peter</div><div class="review-stars">★★★★☆ (56)</div><div class="room-price">$40/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1684508638760-72ad80c0055f?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Budget Backpackers near Town</div><div class="host-info">Hosted by Alice</div><div class="review-stars">★★★★☆ (88)</div><div class="room-price">$7/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Cottage near Kibale Forest</div><div class="host-info">Hosted by David</div><div class="review-stars">★★★★★ (34)</div><div class="room-price">$55/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Homestay with Garden</div><div class="host-info">Hosted by Linda</div><div class="review-stars">★★★★☆ (47)</div><div class="room-price">$15/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1684182309189-a1384f3d7d4c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YWlyYm5ifGVufDB8fDB8fHww');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Luxury Resort with Spa</div><div class="host-info">Hosted by Brian</div><div class="review-stars">★★★★★ (23)</div><div class="room-price">$95/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Guesthouse in Town Center</div><div class="host-info">Hosted by Catherine</div><div class="review-stars">★★★★☆ (62)</div><div class="room-price">$20/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1697807646004-31ae73a1a625?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGFpcmJuYnxlbnwwfHwwfHx8MA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Studio near Market Square</div><div class="host-info">Hosted by Joseph</div><div class="review-stars">★★★★☆ (39)</div><div class="room-price">$18/night</div></div></div>
+    </div></section>
+
+    <!-- Arua -->
+    <section style="margin-bottom: 3rem;"><div style="display: flex; justify-content: space-between;"><h2>🏠 Stays in Arua</h2><a href="stays.html" style="color: var(--primary);">View all →</a></div><div class="rooms-grid">
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Garden Studio with Breakfast</div><div class="host-info">Hosted by Sophia</div><div class="review-stars">★★★★☆ (34)</div><div class="room-price">$22/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Budget Room with Fan</div><div class="host-info">Hosted by Daniel</div><div class="review-stars">★★★☆☆ (56)</div><div class="room-price">$12/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Entire House with Parking</div><div class="host-info">Hosted by Olivia</div><div class="review-stars">★★★★☆ (28)</div><div class="room-price">$45/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Guesthouse near Arua Market</div><div class="host-info">Hosted by Sarah</div><div class="review-stars">★★★★☆ (41)</div><div class="room-price">$18/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1679939153963-ff44f5deeba2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGFpcmJuYnxlbnwwfHwwfHx8MA%3D%3D');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Luxury Villa with Pool</div><div class="host-info">Hosted by James</div><div class="review-stars">★★★★★ (19)</div><div class="room-price">$75/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Simple Double Room</div><div class="host-info">Hosted by Grace</div><div class="review-stars">★★★★☆ (73)</div><div class="room-price">$15/night</div></div></div>
+        <div class="room-card"><div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop');" onerror="this.style.backgroundImage='url(https://placehold.co/400x300/e0e0e0/666?text=Room+Image)'"></div><div class="wishlist-icon"><i class="far fa-heart"></i></div><div class="room-info"><div class="room-title">Family Room with Kitchenette</div><div class="host-info">Hosted by John</div><div class="review-stars">★★★★☆ (33)</div><div class="room-price">$25/night</div></div></div>
+    </div></section>
+
+    <!-- Why choose us, testimonials, CTA -->
+    <section style="margin: 3rem 0;"><h2>Why travelers love Sawa Rooms</h2><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 2rem;"><div style="background: white; padding: 1.5rem; border-radius: 20px;"><i class="fas fa-tag" style="font-size: 2rem; color: var(--primary);"></i><h3>Zero commission</h3><p>No hidden fees – hosts keep 100%, guests pay no booking fee.</p></div><div style="background: white; padding: 1.5rem; border-radius: 20px;"><i class="fas fa-map-marker-alt" style="font-size: 2rem; color: var(--primary);"></i><h3>Local expertise</h3><p>Rooms handpicked across Uganda – from Kampala to Arua.</p></div><div style="background: white; padding: 1.5rem; border-radius: 20px;"><i class="fas fa-headset" style="font-size: 2rem; color: var(--primary);"></i><h3>24/7 support</h3><p>We’re here to help before, during, and after your stay.</p></div></div></section>
+    <section style="background: var(--light-gray); border-radius: 32px; padding: 2rem; margin: 2rem 0;"><h2 style="text-align: center;">What our guests say</h2><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.5rem;"><div style="background: white; padding: 1rem; border-radius: 20px;"><i class="fas fa-quote-left" style="color: var(--primary);"></i><p>“Found a cozy room in Jinja for $8! The host was amazing. Highly recommend Sawa Rooms.”</p><p><strong>– Sarah K.</strong></p></div><div style="background: white; padding: 1rem; border-radius: 20px;"><i class="fas fa-quote-left" style="color: var(--primary);"></i><p>“Zero commission means I saved money as a host. My room got booked within 2 days.”</p><p><strong>– James M.</strong></p></div><div style="background: white; padding: 1rem; border-radius: 20px;"><i class="fas fa-quote-left" style="color: var(--primary);"></i><p>“The filters on the stays page make it so easy to find budget options. Love the WhatsApp share!”</p><p><strong>– Grace A.</strong></p></div></div></section>
+    <section style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border-radius: 32px; padding: 2rem; text-align: center; margin: 2rem 0;"><h2>List your room on Sawa Rooms</h2><p>Earn extra income – it's free and easy.</p><a href="host.html" class="btn btn-outline" style="background: white; color: var(--primary); margin-top: 1rem;">Get started →</a></section>
+</main>
+
+<footer>
+    <p>© 2026 Sawa Rooms – connecting Uganda's travelers to affordable stays</p>
+    <div class="social-icons"><a href="#"><i class="fab fa-facebook"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a></div>
+</footer>
+
+<script>
+    document.querySelectorAll('.wishlist-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const heart = icon.querySelector('i');
+            if (heart.classList.contains('far')) {
+                heart.classList.remove('far');
+                heart.classList.add('fas');
+            } else {
+                heart.classList.remove('fas');
+                heart.classList.add('far');
+            }
+        });
+    });
+    document.querySelectorAll('.room-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.wishlist-icon')) window.location.href = 'stays.html';
+        });
+    });
+    document.getElementById('heroSearchBtn').addEventListener('click', () => {
+        const query = document.getElementById('heroSearch').value.trim();
+        if (query) localStorage.setItem('sawaSearch', query);
+        window.location.href = 'stays.html';
+    });
+</script>
 </body>
 </html>
