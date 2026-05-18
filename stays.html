@@ -27,11 +27,11 @@
     <aside class="filter-sidebar" style="flex: 1.2; min-width: 260px;">
         <h3>Filters</h3>
         <div class="filter-group">
-            <label>💰 Max price per night ($)</label>
+            <label>💰 Max price per night (UGX)</label>
             <div class="price-range">
-                <span>$0</span>
-                <input type="range" id="priceRange" min="0" max="100" step="1" value="100">
-                <span>$<span id="priceValue">100</span></span>
+                <span>0 UGX</span>
+                <input type="range" id="priceRange" min="0" max="200000" step="5000" value="200000">
+                <span><span id="priceValue">200,000</span> UGX</span>
             </div>
         </div>
         <div class="filter-group">
@@ -132,20 +132,27 @@
 
         const priceSlider = document.getElementById('priceRange');
         const priceValue = document.getElementById('priceValue');
-        priceSlider.addEventListener('input', () => { priceValue.innerText = priceSlider.value; filterAndSort(); });
+        priceSlider.addEventListener('input', () => {
+            let val = parseInt(priceSlider.value);
+            priceValue.innerText = val.toLocaleString('en-UG');
+            filterAndSort();
+        });
 
         function getSelectedAmenities() { return [...document.querySelectorAll('#amenitiesCheckboxes input:checked')].map(cb => cb.value); }
 
         function filterAndSort() {
-            const maxPrice = parseInt(priceSlider.value);
+            const maxPriceUgx = parseInt(priceSlider.value);
             const district = document.getElementById('districtFilter').value;
             const minRating = parseFloat(document.getElementById('ratingFilter').value);
             const type = document.getElementById('typeFilter').value;
             const selectedAmenities = getSelectedAmenities();
-            filteredRooms = window.allRooms.filter(r => r.price <= maxPrice && (district === 'all' || r.district === district) && r.rating >= minRating && (type === 'all' || r.type === type) && selectedAmenities.every(amen => r.amenities.includes(amen)));
+            filteredRooms = window.allRooms.filter(r => {
+                let priceNum = parseInt(r.priceUgx.replace(/,/g, ''));
+                return priceNum <= maxPriceUgx && (district === 'all' || r.district === district) && r.rating >= minRating && (type === 'all' || r.type === type) && selectedAmenities.every(amen => r.amenities.includes(amen));
+            });
             const sort = document.getElementById('sortSelect').value;
-            if (sort === 'price_asc') filteredRooms.sort((a,b) => a.price - b.price);
-            if (sort === 'price_desc') filteredRooms.sort((a,b) => b.price - a.price);
+            if (sort === 'price_asc') filteredRooms.sort((a,b) => parseInt(a.priceUgx.replace(/,/g,'')) - parseInt(b.priceUgx.replace(/,/g,'')));
+            if (sort === 'price_desc') filteredRooms.sort((a,b) => parseInt(b.priceUgx.replace(/,/g,'')) - parseInt(a.priceUgx.replace(/,/g,'')));
             if (sort === 'rating_desc') filteredRooms.sort((a,b) => b.rating - a.rating);
             displayedCount = 12;
             renderRooms();
@@ -164,7 +171,7 @@
                         <div class="room-title">${room.name}</div>
                         <div class="host-info"><span class="host-avatar" style="background: #ccc;"></span> Hosted by ${room.host}</div>
                         <div class="review-stars">${window.renderStars(room.rating)} (${room.reviews} reviews)</div>
-                        <div class="room-price">$${room.price} <small>/ night</small></div>
+                        <div class="room-price">${room.priceUgx} UGX <small>(≈ $${room.price}/night)</small></div>
                         <div class="room-actions">
                             <button class="share-wa" data-room='${JSON.stringify(room)}'><i class="fab fa-whatsapp"></i> WhatsApp</button>
                             <button class="share-ig" data-room='${JSON.stringify(room)}'><i class="fab fa-instagram"></i> Instagram</button>
@@ -197,7 +204,7 @@
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     const room = JSON.parse(btn.dataset.room);
-                    const text = `Check out ${room.name} at Sawa Rooms! Only $${room.price}/night.`;
+                    const text = `Check out ${room.name} at Sawa Rooms! Only ${room.priceUgx} UGX/night.`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                 });
             });
@@ -263,16 +270,17 @@
             if (!name || !email || !checkin || !checkout) { document.getElementById('modalMessage').innerHTML = 'Please fill all fields'; return; }
             const nights = Math.ceil((new Date(checkout)-new Date(checkin))/(1000*3600*24));
             const total = nights * selectedRoom.price;
-            document.getElementById('totalPriceDisplay').innerHTML = `Total: $${total} (${nights} nights)`;
+            document.getElementById('totalPriceDisplay').innerHTML = `Total: $${total} (${nights} nights) – ≈ ${(total*3800).toLocaleString('en-UG')} UGX`;
             let bookings = JSON.parse(localStorage.getItem('sawaBookings')) || [];
             bookings.push({ room: selectedRoom.name, guest: name, email, checkin, checkout, total });
             localStorage.setItem('sawaBookings', JSON.stringify(bookings));
             document.getElementById('modalMessage').innerHTML = `✅ Booked ${selectedRoom.name} for $${total}. Check your email (demo).`;
             setTimeout(() => modal.style.display = 'none', 2000);
         });
+
         document.getElementById('applyFilters').addEventListener('click', filterAndSort);
         document.getElementById('clearFilters').addEventListener('click', () => {
-            priceSlider.value = 100; priceValue.innerText = '100';
+            priceSlider.value = 200000; priceValue.innerText = '200,000';
             document.getElementById('districtFilter').value = 'all';
             document.getElementById('ratingFilter').value = '0';
             document.getElementById('typeFilter').value = 'all';
